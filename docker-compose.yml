@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    networks:
+      - gdx-map-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: map-app-client/Dockerfile.frontend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_BACKEND_URL=http://backend:3000
+    networks:
+      - gdx-map-net
+
+networks:
+  gdx-map-net:
+    driver: bridge
