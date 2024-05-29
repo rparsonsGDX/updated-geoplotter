@@ -15,6 +15,10 @@ const db = new sqlite3.Database(dbPath, (err) => {
     }
 });
 
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Get all data from locations
 app.get('/locations', (req, res) => {
     db.all('SELECT * FROM locations', [], (err, rows) => {
         if (err) {
@@ -24,9 +28,6 @@ app.get('/locations', (req, res) => {
         res.json(rows);
     });
 });
-
-// Middleware to parse JSON bodies
-app.use(express.json());
 
 // POST endpoint to add data
 app.post('/api/data', (req, res) => {
@@ -40,7 +41,7 @@ app.post('/api/data', (req, res) => {
     });
 });
 
-// POST endpoint to update data
+// PUT endpoint to update data
 app.put('/api/data', (req, res) => {
     const { uuid, lat, lon, time, date, description } = req.body; // Assuming uuid, lat, lon, time, date, and description are your data fields
     db.run('INSERT INTO locations (uuid, lat, lon, time, date, description) VALUES (?, ?, ?, ?, ?, ?)', [uuid, lat, lon, time, date, description], function(err) {
@@ -51,6 +52,18 @@ app.put('/api/data', (req, res) => {
         res.json({ id: this.lastID });
     });
 });
+
+// DELETE endpoint to reset data
+app.delete('/api/data', (req, res) => {
+    db.run('DELETE FROM locations', [], (err) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.status(200).send('All locations have been deleted');
+    });
+});
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

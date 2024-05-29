@@ -39,22 +39,25 @@ const greenIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-// Function to get the icon based on UUID prefix
+
+// Function to get the icon based on UUID 
+  // Possible UUID values 62D, 63D, 64D, 65D, 66D, 67D, 68D
 const getIconByUuidPrefix = (uuid) => {
-  if (uuid.startsWith('550')) {
+  if (uuid.includes('67D')) {
     return blueIcon;
-  } else if (uuid.startsWith('098')) {
+  } else if (uuid.includes('68D')) {
     return redIcon;
   } else {
     return greenIcon;
   }
 };
 
-// Function to get the color for the timeline icon based on UUID prefix
+// Function to get the color for the timeline icon based on UUID 
+  // Possible UUID values 62D, 63D, 64D, 65D, 66D, 67D, 68D
 const getColorByUuidPrefix = (uuid) => {
-  if (uuid.startsWith('550')) {
+  if (uuid.includes('67D')) {
     return 'rgb(0, 119, 255)'; // Blue
-  } else if (uuid.startsWith('098')) {
+  } else if (uuid.includes('68D')) {
     return 'rgb(255, 0, 0)'; // Red
   } else {
     return 'rgb(0, 255, 0)'; // Green
@@ -66,14 +69,16 @@ const App = () => {
   const mapRef = useRef();
 
   useEffect(() => {
-    const backendUrl = 'http://3.234.16.185:3000';  // Replace with your EC2 instance's public IP
-    axios.get(`${backendUrl}/locations`)
-      .then(response => {
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.get('http://3.234.16.185:3000/locations');
         setLocations(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('There was an error fetching the data!', error);
-      });
+      }
+    };
+
+    fetchLocations();
   }, []);
 
   const handleTimelineClick = (lat, lon) => {
@@ -85,9 +90,20 @@ const App = () => {
     }
   };
 
+  const handleReset = async () => {
+    try {
+      await axios.delete('http://3.234.16.185:3000/locations');
+      setLocations([])
+      console.log('Data successfully deleted from the database.');
+    } catch (error) {
+      console.error('There was an error resetting the data!', error);
+    }
+  };
+
   return (
     <div style={{ display: 'flex' }}>
       <div style={{ width: '70%' }}>
+        <button onClick={handleReset} style={{ margin: '10px' }}>Reset Map</button>
         <MapContainer
           center={[18.4153, -66.0594]}
           zoom={8}
