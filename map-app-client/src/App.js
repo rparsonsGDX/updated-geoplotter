@@ -92,7 +92,7 @@ const App = () => {
 
   const handleReset = async () => {
     try {
-      await axios.delete('http://3.234.16.185:3000/locations');
+      await axios.delete('http://3.234.16.185:3000/api/data');
       setLocations([])
       console.log('Data successfully deleted from the database.');
     } catch (error) {

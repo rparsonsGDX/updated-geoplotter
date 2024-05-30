@@ -9,8 +9,12 @@ COPY . .
 # Stage 2: Production
 FROM node:22-slim
 WORKDIR /app
+
+# Install build tools for sqlite3
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /app /app
-RUN npm install --only=production && npm rebuild sqlite3 --build-from-source
+RUN npm install --only=production --legacy-peer-deps && npm rebuild sqlite3 --build-from-source
 COPY map_data.db /app/map_data.db
 
 # Expose the backend port
