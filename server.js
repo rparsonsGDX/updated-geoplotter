@@ -53,7 +53,7 @@ app.put('/api/data', (req, res) => {
     });
 });
 
-// DELETE endpoint to reset data
+// DELETE endpoint to reset data on map. NOTE: this will clear the database.
 app.delete('/api/data', (req, res) => {
     db.run('DELETE FROM locations', [], (err) => {
         if (err) {
