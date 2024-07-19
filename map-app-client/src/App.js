@@ -11,7 +11,7 @@ import {
 } from 'react-vertical-timeline-component';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// Define custom icons
+// Define custom icons (blue, red, green)
 const blueIcon = new L.Icon({
   iconUrl: './blueIcon.png',
   shadowUrl: iconShadow,
@@ -41,7 +41,7 @@ const greenIcon = new L.Icon({
 
 
 // Function to get the icon based on UUID 
-  // Possible UUID values 62D, 63D, 64D, 65D, 66D, 67D, 68D
+  // Possible UUID values may be "62D, 63D, 64D, 65D, 66D, 67D, 68D" based on June excercise but are subject tpo change. 
 const getIconByUuidPrefix = (uuid) => {
   if (uuid.includes('67D')) {
     return blueIcon;
@@ -53,7 +53,7 @@ const getIconByUuidPrefix = (uuid) => {
 };
 
 // Function to get the color for the timeline icon based on UUID 
-  // Possible UUID values 62D, 63D, 64D, 65D, 66D, 67D, 68D
+  // Possible UUID values may be "62D, 63D, 64D, 65D, 66D, 67D, 68D" based on June excercise but are subject tpo change. 
 const getColorByUuidPrefix = (uuid) => {
   if (uuid.includes('67D')) {
     return 'rgb(0, 119, 255)'; // Blue
